@@ -2,10 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Play, Pause, RotateCw, Trophy, Info } from "lucide-react";
-import { EXERCISES, shuffleDeck, Exercise } from "@/lib/exercises";
+import { EXERCISES, shuffleDeck, Exercise, filterDeck, Category, Level } from "@/lib/exercises";
 import { ExerciseCard } from "@/components/exercise-card";
 import { AnimatePresence, motion } from "framer-motion";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { WorkoutFilters } from "@/components/workout-filter";
 
 export default function Workout() {
   const [deck, setDeck] = useState<Exercise[]>([]);
@@ -14,11 +15,23 @@ export default function Workout() {
   const [isFinished, setIsFinished] = useState(false);
   const [time, setTime] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Filter state
+  const [filters, setFilters] = useState<{ category: Category[]; level: Level[] }>({ category: [], level: [] });
 
-  // Initialize deck
+  // Initialize deck with filters
   useEffect(() => {
-    setDeck(shuffleDeck(EXERCISES));
-  }, []);
+    const filtered = filterDeck(EXERCISES, filters);
+    setDeck(shuffleDeck(filtered));
+    setCurrentIndex(0);
+    setIsFinished(false);
+    setIsPlaying(false);
+    setTime(0);
+  }, [filters]);
+
+  const handleFiltersApply = (newFilters: { category: Category[]; level: Level[] }) => {
+    setFilters(newFilters);
+  };
 
   // Timer logic
   useEffect(() => {
@@ -61,7 +74,8 @@ export default function Workout() {
   };
 
   const handleRestart = () => {
-    setDeck(shuffleDeck(EXERCISES));
+    const filtered = filterDeck(EXERCISES, filters);
+    setDeck(shuffleDeck(filtered));
     setCurrentIndex(0);
     setIsFinished(false);
     setIsPlaying(false);
@@ -69,7 +83,7 @@ export default function Workout() {
   };
 
   const currentExercise = deck[currentIndex];
-  const progress = ((currentIndex) / deck.length) * 100;
+  const progress = deck.length > 0 ? ((currentIndex) / deck.length) * 100 : 0;
 
   return (
     <div className="min-h-screen bg-background flex flex-col max-w-md mx-auto shadow-2xl overflow-hidden relative">
@@ -81,7 +95,9 @@ export default function Workout() {
           </Button>
         </Link>
         <h1 className="font-heading font-bold text-lg">SHUKUMA</h1>
-        <div className="w-10" /> {/* Spacer for balance */}
+        <div className="flex gap-2">
+           {!isPlaying && <WorkoutFilters onApply={handleFiltersApply} />}
+        </div>
       </header>
 
       {/* Main Content */}
@@ -90,13 +106,22 @@ export default function Workout() {
         {/* Status Bar */}
         <div className="mb-6 space-y-2">
            {!isPlaying && !isFinished && currentIndex === 0 ? (
-              <Button 
-                onClick={handleStart} 
-                className="w-full py-6 text-xl font-black uppercase tracking-widest shadow-lg hover:scale-[1.02] transition-transform bg-primary text-primary-foreground"
-                data-testid="button-start-workout"
-              >
-                Start Workout
-              </Button>
+              <div className="space-y-4">
+                <div className="bg-white p-4 rounded-xl border shadow-sm text-center">
+                  <p className="text-sm text-muted-foreground uppercase font-bold mb-1">Cards in Deck</p>
+                  <p className="text-4xl font-black font-heading">{deck.length}</p>
+                  {deck.length === 0 && <p className="text-red-500 text-xs font-bold mt-2">Try adjusting filters!</p>}
+                </div>
+
+                <Button 
+                  onClick={handleStart} 
+                  className="w-full py-6 text-xl font-black uppercase tracking-widest shadow-lg hover:scale-[1.02] transition-transform bg-primary text-primary-foreground"
+                  data-testid="button-start-workout"
+                  disabled={deck.length === 0}
+                >
+                  Start Workout
+                </Button>
+              </div>
            ) : (
              <div className="grid grid-cols-3 gap-2">
                 <Button 

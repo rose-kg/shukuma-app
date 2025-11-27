@@ -5,6 +5,8 @@ import plankImg from "@assets/IMG_9942_1764247940333.png";
 
 export type Suit = "hearts" | "diamonds" | "clubs" | "spades";
 export type Rank = "A" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "J" | "Q" | "K";
+export type Category = "cardio" | "strength" | "flexibility" | "core";
+export type Level = "beginner" | "intermediate" | "advanced";
 
 export interface Exercise {
   id: string;
@@ -14,6 +16,8 @@ export interface Exercise {
   reps: number | string; // e.g. "10" or "30s"
   image: string;
   instructions: string[];
+  category: Category;
+  level: Level;
 }
 
 export const EXERCISES: Exercise[] = [
@@ -28,7 +32,9 @@ export const EXERCISES: Exercise[] = [
       "Start in a push-up position but with your weight on your forearms.",
       "Keep your body in a straight line from head to heels.",
       "Engage your core and hold."
-    ]
+    ],
+    category: "core",
+    level: "intermediate"
   },
   {
     id: "2",
@@ -42,7 +48,9 @@ export const EXERCISES: Exercise[] = [
       "Lower your hips as if sitting in a chair.",
       "Keep your chest up and back straight.",
       "Return to standing position."
-    ]
+    ],
+    category: "strength",
+    level: "beginner"
   },
   {
     id: "3",
@@ -56,7 +64,9 @@ export const EXERCISES: Exercise[] = [
       "Lower your hips until both knees are bent at 90 degrees.",
       "Push back to the starting position.",
       "Repeat with the other leg."
-    ]
+    ],
+    category: "strength",
+    level: "intermediate"
   },
   {
     id: "4",
@@ -69,44 +79,53 @@ export const EXERCISES: Exercise[] = [
       "Start with feet together and arms at your sides.",
       "Jump up, spreading your feet and bringing arms overhead.",
       "Jump again to return to the starting position."
-    ]
+    ],
+    category: "cardio",
+    level: "beginner"
   },
-  // Duplicates to fill the deck for demo purposes
   {
     id: "5",
-    name: "Plank",
+    name: "Plank (Advanced)",
     suit: "hearts",
     rank: "5",
-    reps: "45s",
+    reps: "60s",
     image: plankImg,
-    instructions: ["Challenge yourself to hold longer!"]
+    instructions: ["Challenge yourself to hold longer!"],
+    category: "core",
+    level: "advanced"
   },
   {
     id: "6",
-    name: "Deep Squat",
+    name: "Deep Squat (Pulse)",
     suit: "clubs",
     rank: "8",
     reps: 20,
     image: squatImg,
-    instructions: ["Go lower this time!"]
+    instructions: ["Add a small pulse at the bottom of the squat."],
+    category: "strength",
+    level: "intermediate"
   },
   {
     id: "7",
-    name: "Forward Lunge",
+    name: "Walking Lunge",
     suit: "diamonds",
     rank: "4",
     reps: 12,
     image: lungeImg,
-    instructions: ["Keep your core tight."]
+    instructions: ["Lunge forward continuously across the room."],
+    category: "strength",
+    level: "intermediate"
   },
   {
     id: "8",
-    name: "Jumping Jacks",
+    name: "Sprint Jacks",
     suit: "spades",
     rank: "A",
     reps: 50,
     image: jumpingJackImg,
-    instructions: ["Go as fast as you can!"]
+    instructions: ["Go as fast as you can!"],
+    category: "cardio",
+    level: "advanced"
   }
 ];
 
@@ -117,4 +136,12 @@ export function shuffleDeck(deck: Exercise[]): Exercise[] {
     [newDeck[i], newDeck[j]] = [newDeck[j], newDeck[i]];
   }
   return newDeck;
+}
+
+export function filterDeck(deck: Exercise[], filters: { category?: Category[], level?: Level[] }): Exercise[] {
+  return deck.filter(ex => {
+    const catMatch = !filters.category || filters.category.length === 0 || filters.category.includes(ex.category);
+    const levelMatch = !filters.level || filters.level.length === 0 || filters.level.includes(ex.level);
+    return catMatch && levelMatch;
+  });
 }

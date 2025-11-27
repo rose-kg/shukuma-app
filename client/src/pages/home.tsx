@@ -1,9 +1,12 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Play, CreditCard, Trophy, Users } from "lucide-react";
+import { Play, CreditCard, Trophy, Users, User } from "lucide-react";
 import { motion } from "framer-motion";
+import { useAuth } from "@/context/auth-context";
 
 export default function Home() {
+  const { user } = useAuth();
+
   return (
     <div className="min-h-screen bg-background flex flex-col max-w-md mx-auto relative overflow-hidden">
       
@@ -19,9 +22,15 @@ export default function Home() {
           </div>
           <span className="font-heading font-black text-2xl tracking-tight">SHUKUMA</span>
         </div>
-        <Button variant="ghost" size="icon" className="rounded-full">
-          <Users className="h-6 w-6" />
-        </Button>
+        
+        <Link href={user ? "/profile" : "/auth"}>
+          <Button variant="ghost" size="icon" className="rounded-full relative">
+            {user ? <User className="h-6 w-6" /> : <Users className="h-6 w-6" />}
+            {user && (
+              <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white"></span>
+            )}
+          </Button>
+        </Link>
       </header>
 
       {/* Hero Section */}
