@@ -1,0 +1,109 @@
+Product Name: Shukuma
+Founder: Yanga Ngcayisa
+
+Objective:
+Shukuma is designed to provide users with a simple, engaging, and convenient way to stay active without the hassle of a gym or complex workout routines. Through a randomized card-based system, the app ensures variety, excitement, and accessibility to fitness. The app aims to replicate the innovative approach of the physical exercise card pack in a digital format, allowing users to access workouts anytime, anywhere.
+
+Key Features:
+1. Randomised Workouts:
+Users can shuffle the deck and pick a random workout card each day.
+
+Offers a surprise workout every time, keeping users engaged and motivated.
+
+2. Clear Instructions & Visuals:
+Each workout card contains easy-to-follow, step-by-step instructions with accompanying visuals.
+
+Ensures users know exactly how to perform each exercise correctly and safely.
+
+3. Fitness Challenges & Goals:
+Daily and weekly challenges to encourage consistency and help users track progress.
+
+Users can set goals, track performance, and receive rewards or achievements to maintain motivation.
+
+4. No Equipment Necessary:
+All exercises can be done with body weight, requiring no special equipment.
+
+Perfect for home, travel, or outdoor workouts.
+
+5. Customisable Workouts:
+Users can filter workouts based on fitness level, workout duration, or specific goals (e.g., cardio, strength, flexibility).
+
+Ability to tailor workouts to suit individual needs.
+
+6. Progress Tracker:
+Built-in progress tracker logs each workout completed, tracks streaks, and monitors improvement.
+
+Users can see workout history, progress over time, and set new goals.
+
+7. Portable & Convenient:
+Replicates the convenience of the physical card pack, offering easy access to workouts anytime, anywhere.
+
+Available on both Android and iOS.
+
+8. Community & Social Integration:
+Social features allow users to share progress, achievements, and challenge friends.
+
+Integration with social media platforms and a built-in app community enhances engagement and accountability.
+
+New Additional Features:
+9. Tasks:
+Daily/Quick access to assigned or set tasks for better workout organization.
+
+10. Self-Regulation Tools:
+Journaling feature to track thoughts and reflections on fitness and wellness.
+
+Breathwork exercises for relaxation and focus.
+
+White noise for concentration and stress management.
+
+Trigger management: Users can identify, manage, and respond to stress triggers.
+
+11. Connection & Social Features:
+Users can assign workout cards to friends or tag a friend to join them.
+
+Supports and celebrates friends moving through the card workouts.
+
+12. Challenges:
+Daily Card Challenge
+
+Streak Challenge
+
+Most Cards Done Challenge
+
+Time-Based Challenge
+
+Group Challenge for team-based motivation
+
+13. Nutrition Support:
+Food Journal for tracking daily meals and nutrition habits.
+
+Meal Guides providing healthy meal plans and recipes.
+
+Technology Stack:
+Front-End:
+Native mobile development (React Native, Flutter, or native Swift for iOS and Kotlin for Android).
+
+Back-End:
+Cloud-based infrastructure (Firebase, Node.js with Express) for user authentication, data storage, and notifications.
+
+Database:
+Firebase or MongoDB for storing user data (workout history, progress, settings).
+
+Analytics & Tracking:
+Google Analytics or Firebase Analytics for tracking user interactions, performance, and app growth.
+
+Push Notifications:
+Firebase Cloud Messaging or OneSignal for sending workout reminders, motivational messages, or new challenge alerts.
+
+ Strategy:
+Freemium Model:
+Free version with access to a limited number of workouts and basic tracking features.
+
+Premium version offering more workouts, advanced tracking, fitness goals, and exclusive challenges.
+
+In-App Purchases:
+Users can buy additional workout packs or features, such as personalised fitness plans or special challenges.
+
+Subscription Model:
+Monthly or yearly subscription for access to the full range of workouts and premium features.
+
