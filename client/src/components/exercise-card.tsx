@@ -10,17 +10,6 @@ interface ExerciseCardProps {
 }
 
 export function ExerciseCard({ exercise, isActive, onClick }: ExerciseCardProps) {
-  const suitColor = exercise.suit === "hearts" || exercise.suit === "diamonds" ? "text-red-500" : "text-slate-900";
-  
-  const SuitIcon = () => {
-    switch(exercise.suit) {
-      case "hearts": return <span>♥</span>;
-      case "diamonds": return <span>♦</span>;
-      case "clubs": return <span>♣</span>;
-      case "spades": return <span>♠</span>;
-    }
-  };
-
   return (
     <motion.div 
       className={cn(
@@ -35,18 +24,6 @@ export function ExerciseCard({ exercise, isActive, onClick }: ExerciseCardProps)
       data-testid={`card-${exercise.id}`}
     >
       <Card className="w-full h-full border-4 border-white shadow-xl overflow-hidden bg-white rounded-3xl relative">
-        {/* Card Corner Top-Left */}
-        <div className={cn("absolute top-4 left-4 flex flex-col items-center font-heading font-bold text-4xl leading-none", suitColor)}>
-          <span>{exercise.rank}</span>
-          <span className="text-3xl mt-1"><SuitIcon /></span>
-        </div>
-
-        {/* Card Corner Bottom-Right (Rotated) */}
-        <div className={cn("absolute bottom-4 right-4 flex flex-col items-center font-heading font-bold text-4xl leading-none rotate-180", suitColor)}>
-          <span>{exercise.rank}</span>
-          <span className="text-3xl mt-1"><SuitIcon /></span>
-        </div>
-
         <CardContent className="flex flex-col items-center justify-center h-full p-6 pt-12">
           <div className="relative w-full aspect-square mb-4 flex items-center justify-center">
              {/* Yellow Background Circle - simulating the style */}
@@ -57,15 +34,6 @@ export function ExerciseCard({ exercise, isActive, onClick }: ExerciseCardProps)
                className="relative z-10 object-contain w-full h-full drop-shadow-sm"
              />
           </div>
-          
-          <h3 className="font-heading font-black text-2xl text-center uppercase tracking-tight mb-2">
-            {exercise.name}
-          </h3>
-          
-          <div className="bg-primary/10 text-primary-foreground font-bold px-6 py-2 rounded-full text-xl">
-             {exercise.reps} {typeof exercise.reps === 'number' ? 'Reps' : ''}
-          </div>
-          
         </CardContent>
       </Card>
     </motion.div>
