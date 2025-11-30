@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "wouter";
 import { ArrowLeft } from "lucide-react";
+import { GoogleLoginButton } from "@/components/GoogleLoginButton";
 
 export default function AuthPage() {
   const { login } = useAuth();
@@ -78,6 +79,7 @@ export default function AuthPage() {
                 <Button type="submit" className="w-full font-bold" disabled={isLoading}>
                   {isLoading ? "Logging in..." : "Login"}
                 </Button>
+                <GoogleLoginButton />
               </form>
             </CardContent>
           </Card>
@@ -117,6 +119,7 @@ export default function AuthPage() {
                 <Button type="submit" className="w-full font-bold" disabled={isLoading}>
                   {isLoading ? "Creating Account..." : "Sign Up"}
                 </Button>
+                <GoogleLoginButton />
               </form>
             </CardContent>
           </Card>

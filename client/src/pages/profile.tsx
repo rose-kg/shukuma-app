@@ -18,12 +18,15 @@ const weeklyData = [
 ];
 
 export default function ProfilePage() {
-  const { user, logout } = useAuth();
+  const { user, logout, isLoading } = useAuth();
   const [, setLocation] = useLocation();
 
-  if (!user) {
+  if (!user && !isLoading) {
     setLocation("/auth");
     return null;
+  }
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
 
   return (
@@ -42,6 +45,11 @@ export default function ProfilePage() {
       </header>
 
       <main className="flex-1 p-6 space-y-6 overflow-y-auto">
+                <div className="w-full flex justify-end mb-4">
+                  <Link href="/workout">
+                    <Button variant="secondary">Go to Workouts</Button>
+                  </Link>
+                </div>
         
         {/* User Info */}
         <div className="flex items-center gap-4">

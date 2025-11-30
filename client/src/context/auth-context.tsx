@@ -1,4 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { auth } from "@/lib/firebase";
+import { db } from "@/lib/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useLocation } from "wouter";
 
 // Mock user type
@@ -26,26 +30,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [, setLocation] = useLocation();
 
   useEffect(() => {
-    // Simulate checking local storage or session
-    const storedUser = localStorage.getItem("shukuma_user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setIsLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        // Fetch user profile from Firestore
+        const userRef = doc(db, "users", firebaseUser.uid);
+        let userSnap = await getDoc(userRef);
+        if (!userSnap.exists()) {
+          // Create user profile if not exists
+          const newUser: User = {
+            id: firebaseUser.uid,
+            name: firebaseUser.displayName || firebaseUser.email?.split("@")[0] || "User",
+            email: firebaseUser.email || "",
+            streak: 0,
+            workoutsCompleted: 0,
+            joinDate: new Date().toLocaleDateString()
+          };
+          await setDoc(userRef, newUser);
+          setUser(newUser);
+        } else {
+          setUser(userSnap.data() as User);
+        }
+      } else {
+        setUser(null);
+      }
+      setIsLoading(false);
+    });
+    return () => unsubscribe();
   }, []);
 
   const login = (email: string) => {
-    // In a real app, this would call Firebase Auth
-    const mockUser = {
-      id: "123",
-      name: email.split("@")[0],
-      email,
-      streak: 5,
-      workoutsCompleted: 42,
-      joinDate: new Date().toLocaleDateString()
-    };
-    setUser(mockUser);
-    localStorage.setItem("shukuma_user", JSON.stringify(mockUser));
+    // This is now handled by Firebase Auth (Google, etc.)
     setLocation("/profile");
   };
 

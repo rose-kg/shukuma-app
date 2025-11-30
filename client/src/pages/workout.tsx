@@ -87,6 +87,11 @@ export default function Workout() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col max-w-md mx-auto shadow-2xl overflow-hidden relative">
+      <div className="w-full flex justify-end p-4">
+        <Link href="/profile">
+          <Button variant="secondary">Go to Dashboard</Button>
+        </Link>
+      </div>
       {/* Header */}
       <header className="p-4 flex items-center justify-between bg-primary text-primary-foreground shadow-sm z-20 relative">
         <Link href="/">
