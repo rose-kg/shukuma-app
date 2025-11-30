@@ -3,12 +3,16 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Play, Pause, RotateCw, Trophy, Info } from "lucide-react";
 import { EXERCISES, shuffleDeck, Exercise, filterDeck, Category, Level } from "@/lib/exercises";
+import { useAuth } from "@/context/auth-context";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "@/lib/firestore";
 import { ExerciseCard } from "@/components/exercise-card";
 import { AnimatePresence, motion } from "framer-motion";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { WorkoutFilters } from "@/components/workout-filter";
 
 export default function Workout() {
+  const { user } = useAuth();
   const [deck, setDeck] = useState<Exercise[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -62,7 +66,7 @@ export default function Workout() {
     setIsPlaying(false);
   };
 
-  const handleNextCard = () => {
+  const handleNextCard = async () => {
     if (!isPlaying) return;
     
     if (currentIndex < deck.length - 1) {
@@ -70,6 +74,18 @@ export default function Workout() {
     } else {
       setIsFinished(true);
       setIsPlaying(false);
+      // Update streak and workoutsCompleted in Firestore
+      if (user) {
+        try {
+          const userRef = doc(db, "users", user.id);
+          await updateDoc(userRef, {
+            streak: (user.streak || 0) + 1,
+            workoutsCompleted: (user.workoutsCompleted || 0) + 1,
+          });
+        } catch (err) {
+          // Optionally handle error (e.g., toast)
+        }
+      }
     }
   };
 
