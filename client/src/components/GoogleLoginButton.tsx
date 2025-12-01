@@ -1,5 +1,5 @@
 import { auth, googleProvider } from "@/lib/firebase";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithRedirect } from "firebase/auth";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/auth-context";
 import { useLocation } from "wouter";
@@ -9,14 +9,7 @@ export function GoogleLoginButton() {
   const [, setLocation] = useLocation();
   const handleGoogleLogin = async () => {
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-      if (user.email) {
-        login(user.email);
-        setLocation("/profile");
-      } else {
-        alert("Google login failed: No email returned.");
-      }
+      await signInWithRedirect(auth, googleProvider);
     } catch (error) {
       alert("Google login failed: " + error);
     }

@@ -31,6 +31,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      console.log('onAuthStateChanged:', firebaseUser);
+      console.log('current pathname:', window.location.pathname);
       if (firebaseUser) {
         // Fetch user profile from Firestore
         const userRef = doc(db, "users", firebaseUser.uid);
@@ -47,8 +49,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           };
           await setDoc(userRef, newUser);
           setUser(newUser);
+          if (window.location.pathname === "/auth" || window.location.pathname === "/") setLocation("/");
         } else {
           setUser(userSnap.data() as User);
+          if (window.location.pathname === "/auth" || window.location.pathname === "/") setLocation("/");
         }
       } else {
         setUser(null);
@@ -60,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = (email: string) => {
     // This is now handled by Firebase Auth (Google, etc.)
-    setLocation("/profile");
+    // Navigation is handled by onAuthStateChanged
   };
 
   const logout = () => {
