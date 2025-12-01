@@ -12,6 +12,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { WorkoutFilters } from "@/components/workout-filter";
 
 export default function Workout() {
+  const [selectedReview, setSelectedReview] = useState<string>("");
+  const [reviewSent, setReviewSent] = useState(false);
   const { user } = useAuth();
   const [deck, setDeck] = useState<Exercise[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -226,13 +228,58 @@ export default function Workout() {
                   <Trophy className="h-10 w-10" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-heading font-black text-primary uppercase">Workout<br/>Complete!</h2>
-                  <p className="text-muted-foreground mt-2">You crushed it.</p>
+                  <h2 className="text-3xl font-heading font-black text-primary uppercase">End of Workout</h2>
+                  <p className="text-muted-foreground mt-2">Well done {user?.name ? user.name : user?.email ? user.email : "!"}!</p>
                 </div>
-                <div className="py-4 border-y border-dashed">
-                   <p className="text-sm uppercase text-muted-foreground font-bold">Total Time</p>
-                   <p className="text-4xl font-mono font-black">{formatTime(time)}</p>
+                <div className="py-4 border-y border-dashed space-y-2">
+                  <p className="text-lg font-bold text-primary">{Math.round(progress)}%</p>
+                  <p className="text-sm uppercase text-muted-foreground font-bold">Cards Completed: {deck.length}</p>
+                  <p className="text-sm uppercase text-muted-foreground font-bold">Time: {formatTime(time)}</p>
                 </div>
+                <div className="mt-4">
+                  <p className="font-bold text-lg">Thank you for trying out Shukuma</p>
+                </div>
+                <div className="mt-6">
+                  <h3 className="font-bold text-xl mb-2">Review</h3>
+                  <p className="mb-4">How was your experience?</p>
+                  <div className="flex justify-center gap-2 mb-4">
+                    {['😃','😊','😐','😞'].map((emoji) => (
+                      <Button
+                        key={emoji}
+                        variant={selectedReview === emoji ? "default" : "outline"}
+                        onClick={() => setSelectedReview(emoji)}
+                        style={selectedReview === emoji ? { backgroundColor: '#FF9800', color: '#fff' } : {}}
+                      >
+                        {emoji}
+                      </Button>
+                    ))}
+                  </div>
+                  <Button
+                    size="sm"
+                    className="w-full font-bold text-md"
+                    disabled={!selectedReview || reviewSent}
+                    onClick={() => {
+                      // Here you would send the review to your backend or Firestore
+                      setReviewSent(true);
+                      setTimeout(() => {
+                        setSelectedReview("");
+                        setReviewSent(false);
+                      }, 1500);
+                    }}
+                    style={{ backgroundColor: selectedReview ? '#FF9800' : undefined, color: selectedReview ? '#fff' : undefined }}
+                  >
+                    {reviewSent ? "Review Sent!" : "Send Review"}
+                  </Button>
+                </div>
+                <a href="https://www.y-notofficial.co.za/" target="_blank" rel="noopener noreferrer">
+                  <Button 
+                    size="lg" 
+                    className="w-full font-bold text-lg mt-8 mb-4" 
+                    style={{ backgroundColor: '#FF9800', color: '#fff' }}
+                  >
+                    Purchase the Deck
+                  </Button>
+                </a>
                 <Button size="lg" className="w-full font-bold text-lg" onClick={handleRestart}>
                   Start New Workout
                 </Button>
